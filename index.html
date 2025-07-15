@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>生日快乐！</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <!--<meta itemprop="image" content="./images/fenxiang.png" />-->
     <style>
         html {
             height: 100%;
@@ -17,6 +16,7 @@
             line-height: 2;
             letter-spacing: 1.2px;
             margin: 0;
+            cursor: pointer; /* 提示用户可点击 */
         }
         a {
             color: #ebf7f4;
@@ -81,6 +81,19 @@
             width: 100%;
             font-weight: bold;
         }
+        /* 提示点击播放音乐的提示 */
+        .play-hint {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            z-index: 100;
+        }
     </style>
 
 </head>
@@ -89,6 +102,8 @@
 <div class="cs">
     <img src="picture/47.jpg" id="logo">
 </div>
+<!-- 提示用户点击播放 -->
+<div class="play-hint" id="playHint">点击页面播放音乐 🎵</div>
 <canvas class="canvas" width="1820" height="905"></canvas>
 <p class="text" style="color: #ed3073;">
     
@@ -574,9 +589,22 @@
     }());
     S.init();
 </script>
-<!--//音乐可改-->
-<audio autoplay="autoplay" loop="loop">
+<audio id="bgMusic" loop>
     <source src="bgm/bgm.mp3" type="audio/mpeg">
+    您的浏览器不支持音频播放
 </audio>
+<script>
+    // 用户点击页面后播放音乐
+    document.addEventListener('click', function() {
+        var audio = document.getElementById('bgMusic');
+        audio.play().then(() => {
+            // 播放成功，隐藏提示
+            document.getElementById('playHint').style.display = 'none';
+        }).catch(e => {
+            // 播放失败，提示用户
+            document.getElementById('playHint').textContent = '播放失败，请检查音频文件';
+        });
+    }, { once: true }); // 只监听一次点击
+</script>
 </body>
 </html>
